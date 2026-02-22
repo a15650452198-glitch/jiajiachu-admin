@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import cloudbase from '@cloudbase/js-sdk';
 
 const app = cloudbase.init({
-  env: cloud1-5g8unv4l1a3f77a1   // 替换成你的云环境ID，例如 jiajiachu-prod-123abc
+  env: 'cloud1-5g8unv4l1a3f77a1'   // 替换成你的云环境ID，例如 jiajiachu-prod-123abc
 });
 
 export const db = app.database();
