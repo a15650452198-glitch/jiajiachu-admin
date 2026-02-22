@@ -1,3 +1,4 @@
+import OrderManagement from './pages/OrderManagement';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
@@ -13,6 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/users" element={<UserManagement />} />
+        <Route path="/orders" element={<OrderManagement />} />
         <Route path="/chefs" element={<ChefManagement />} />   {/* 新增 */}
       </Routes>
     </BrowserRouter>
