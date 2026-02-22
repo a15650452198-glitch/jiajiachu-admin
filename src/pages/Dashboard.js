@@ -1,134 +1,137 @@
-import React, { useEffect, useState } from 'react';
-import { FaClipboardList, FaMoneyBillWave, FaUserCheck, FaUsersCog, FaUndoAlt, FaHeartbeat } from 'react-icons/fa';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import React, { useState, useEffect } from 'react';
+import { Card, Row, Col, Statistic } from 'antd';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { UserOutlined, ShoppingOutlined, CheckCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import { db } from '../index';
 
-const cardStyle = {
-  background: '#fff',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
-  borderRadius: '8px',
-  padding: '24px',
-  minWidth: '180px',
-  flex: 1,
-  display: 'flex',
-  alignItems: 'center',
-  gap: '16px',
-};
-
-const iconStyle = {
-  fontSize: '2.2rem',
-  color: '#387ef5',
-};
-
-const dashboardGrid = {
-  display: 'flex',
-  gap: '24px',
-  marginBottom: '32px',
-  flexWrap: 'wrap',
-};
-
-const chartCardStyle = {
-  background: '#fff',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
-  borderRadius: '8px',
-  padding: '24px',
-  minHeight: '340px',
-  width: '100%',
-};
-
-const titleStyle = {
-  fontSize: '1.22rem',
-  fontWeight: 500,
-  marginBottom: '18px',
-};
-
-function Dashboard() {
-  // 仪表盘核心数据（模拟数据）
-  const [metrics, setMetrics] = useState({
-    todayOrders: 24,
-    todayRevenue: 1580.5,
-    pendingChefs: 4,
-    pendingCommunity: 2,
-    pendingRefunds: 3,
-    healthCertExpiring: 5,
+const Dashboard = () => {
+  const [stats, setStats] = useState({
+    todayOrders: 0,
+    todayAmount: 0,
+    pendingChefs: 0,
+    pendingCommunity: 0,
+    pendingRefunds: 0,
+    expiringHealthCerts: 0
   });
+  const [trendData, setTrendData] = useState([]);
 
-  // 近7天订单趋势（模拟数据）
-  const [trend, setTrend] = useState([
-    { date: '周一', orders: 15 },
-    { date: '周二', orders: 22 },
-    { date: '周三', orders: 18 },
-    { date: '周四', orders: 19 },
-    { date: '周五', orders: 21 },
-    { date: '周六', orders: 24 },
-    { date: '周日', orders: 17 },
-  ]);
-
-  // 数据请求可用时替换为异步获取
   useEffect(() => {
-    // 示例: fetch数据库数据后setMetrics, setTrend
-    // 例如 db.collection('orders').where(...) ...
+    fetchStats();
+    fetchTrendData();
   }, []);
 
+  const fetchStats = async () => {
+    try {
+      // 模拟数据，实际可从云数据库获取
+      setStats({
+        todayOrders: 128,
+        todayAmount: 4560,
+        pendingChefs: 3,
+        pendingCommunity: 5,
+        pendingRefunds: 2,
+        expiringHealthCerts: 4
+      });
+    } catch (error) {
+      console.error('获取统计数据失败', error);
+    }
+  };
+
+  const fetchTrendData = async () => {
+    // 模拟近7天订单趋势
+    const data = [
+      { name: '2/15', orders: 85 },
+      { name: '2/16', orders: 92 },
+      { name: '2/17', orders: 78 },
+      { name: '2/18', orders: 110 },
+      { name: '2/19', orders: 95 },
+      { name: '2/20', orders: 120 },
+      { name: '2/21', orders: 128 },
+    ];
+    setTrendData(data);
+  };
+
   return (
-    <div style={{ padding: '36px', background: '#f4f6fb', minHeight: '100vh' }}>
-      <div style={dashboardGrid}>
-        <div style={cardStyle}>
-          <FaClipboardList style={iconStyle} />
-          <div>
-            <div style={{ fontWeight: 600, fontSize: '1.14rem' }}>{metrics.todayOrders}</div>
-            <div style={{ color: '#888' }}>今日订单数</div>
-          </div>
-        </div>
-        <div style={cardStyle}>
-          <FaMoneyBillWave style={iconStyle} />
-          <div>
-            <div style={{ fontWeight: 600, fontSize: '1.14rem' }}>¥{metrics.todayRevenue.toLocaleString()}</div>
-            <div style={{ color: '#888' }}>今日成交金额</div>
-          </div>
-        </div>
-        <div style={cardStyle}>
-          <FaUserCheck style={iconStyle} />
-          <div>
-            <div style={{ fontWeight: 600, fontSize: '1.14rem' }}>{metrics.pendingChefs}</div>
-            <div style={{ color: '#888' }}>待审核厨师数</div>
-          </div>
-        </div>
-        <div style={cardStyle}>
-          <FaUsersCog style={iconStyle} />
-          <div>
-            <div style={{ fontWeight: 600, fontSize: '1.14rem' }}>{metrics.pendingCommunity}</div>
-            <div style={{ color: '#888' }}>待审核社区内容数</div>
-          </div>
-        </div>
-        <div style={cardStyle}>
-          <FaUndoAlt style={iconStyle} />
-          <div>
-            <div style={{ fontWeight: 600, fontSize: '1.14rem' }}>{metrics.pendingRefunds}</div>
-            <div style={{ color: '#888' }}>待处理退款数</div>
-          </div>
-        </div>
-        <div style={cardStyle}>
-          <FaHeartbeat style={iconStyle} />
-          <div>
-            <div style={{ fontWeight: 600, fontSize: '1.14rem' }}>{metrics.healthCertExpiring}</div>
-            <div style={{ color: '#888' }}>健康证即将到期</div>
-          </div>
-        </div>
-      </div>
-      <div style={chartCardStyle}>
-        <div style={titleStyle}>近7天订单趋势</div>
-        <ResponsiveContainer width="100%" height={260}>
-          <LineChart data={trend}>
+    <div style={{ padding: '24px' }}>
+      <h1>仪表盘</h1>
+      <Row gutter={16}>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="今日订单"
+              value={stats.todayOrders}
+              prefix={<ShoppingOutlined />}
+              valueStyle={{ color: '#3f8600' }}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="今日交易额"
+              value={stats.todayAmount}
+              prefix="¥"
+              precision={2}
+              valueStyle={{ color: '#cf1322' }}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="待审核厨师"
+              value={stats.pendingChefs}
+              prefix={<UserOutlined />}
+              valueStyle={{ color: '#faad14' }}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="待审核社区"
+              value={stats.pendingCommunity}
+              prefix={<CheckCircleOutlined />}
+              valueStyle={{ color: '#1890ff' }}
+            />
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={16} style={{ marginTop: '24px' }}>
+        <Col span={12}>
+          <Card title="健康证即将到期厨师">
+            <Statistic
+              value={stats.expiringHealthCerts}
+              prefix={<WarningOutlined />}
+              valueStyle={{ color: '#fa541c' }}
+            />
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card title="待处理退款">
+            <Statistic
+              value={stats.pendingRefunds}
+              prefix={<WarningOutlined />}
+              valueStyle={{ color: '#f5222d' }}
+            />
+          </Card>
+        </Col>
+      </Row>
+
+      <Card title="近7天订单趋势" style={{ marginTop: '24px' }}>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={trendData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis allowDecimals={false} />
+            <XAxis dataKey="name" />
+            <YAxis />
             <Tooltip />
-            <Line type="monotone" dataKey="orders" stroke="#387ef5" strokeWidth={3} activeDot={{ r: 8 }} />
+            <Legend />
+            <Line type="monotone" dataKey="orders" stroke="#8884d8" activeDot={{ r: 8 }} />
           </LineChart>
         </ResponsiveContainer>
-      </div>
+      </Card>
     </div>
   );
-}
+};
 
 export default Dashboard;
