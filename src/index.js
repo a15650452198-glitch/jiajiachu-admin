@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import cloudbase from '@cloudbase/js-sdk';
 
-const app = cloudbase.init({
+export const app = cloudbase.init({
   env: 'cloud1-5g8unv4l1a3f77a1',
 });
 
